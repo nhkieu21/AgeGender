@@ -31,7 +31,8 @@ class FaceAge(nn.Module):
     def forward(self, x):
         return self.backbone(x)
     
-def load_models(age_path='ModelAge.pth', gender_path='ModelGender.pth'):
+# def load_models(age_path='ModelAge.pth', gender_path='ModelGender.pth'):
+def load_models(age_path='age.pth', gender_path='ModelGender.pth'):
     age_model = FaceAge().to(device)
     age_model.load_state_dict(torch.load(age_path, map_location=device))
     age_model.eval()
