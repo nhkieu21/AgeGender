@@ -39,3 +39,7 @@ async def predict_from_image(image: UploadFile = File(...)):
         "pred_age": pred_age,
         "pred_gender": pred_gender
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
