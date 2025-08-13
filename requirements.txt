@@ -4,8 +4,4 @@ pillow
 torch
 torchvision
 scikit-learn
-<<<<<<< HEAD
 python-multipart
-=======
-python-multipart
->>>>>>> 4140aec32849ec20dae52e5688a38650946c4534

@@ -40,16 +40,8 @@ async def predict_from_image(image: UploadFile = File(...)):
         "pred_age": pred_age,
         "pred_gender": pred_gender
     }
-<<<<<<< HEAD
-    
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.environ.get("PORT", 8000))  # Lấy PORT từ Render
-    uvicorn.run(app, host="0.0.0.0", port=port)
-=======
 
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))  # Lấy PORT từ Render
     uvicorn.run(app, host="0.0.0.0", port=port)
->>>>>>> 4140aec32849ec20dae52e5688a38650946c4534
