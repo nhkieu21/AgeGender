@@ -2,4 +2,6 @@ fastapi
 uvicorn
 pillow
 torch
+torchvision
 scikit-learn
+python-multipart

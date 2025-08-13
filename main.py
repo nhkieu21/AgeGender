@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from utils import load_models, predict
 import io
+import os
 
 app = FastAPI(title='Age & Gender Prediction API')
 
@@ -39,3 +40,8 @@ async def predict_from_image(image: UploadFile = File(...)):
         "pred_age": pred_age,
         "pred_gender": pred_gender
     }
+    
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))  # Lấy PORT từ Render
+    uvicorn.run(app, host="0.0.0.0", port=port)
