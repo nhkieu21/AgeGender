@@ -1,5 +1,6 @@
 fastapi
 uvicorn
+deepface
 pillow
 torch
 torchvision
