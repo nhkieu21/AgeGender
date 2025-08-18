@@ -4,9 +4,5 @@ deepface
 pillow
 torch
 torchvision
-scikit-learn
-python-multipart
-
-opencv-python
 numpy
-tensorflow
+python-multipart
