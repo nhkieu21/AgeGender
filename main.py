@@ -1,16 +1,16 @@
-from PIL import Image
-from fastapi import FastAPI, UploadFile, File, Request
+from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from utils import load_models, predict
 from deepface import DeepFace
-import io
-import os
+from PIL import Image
 import numpy as np
+import io
+from tempfile import NamedTemporaryFile
+import os
 
 app = FastAPI(title='Age & Gender Prediction API')
 
-model_age, model_gender = load_models()
+# model_age, model_gender = load_models()
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,6 +19,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+face_model = DeepFace.build_model("Facenet")
+
 @app.get("/")
 def home():
     return {"message": "Welcome to Age and Gender Prediction API"}
@@ -51,16 +54,24 @@ async def predict_from_image(image: UploadFile = File(...)):
     try:
         contents = await image.read()
         img = Image.open(io.BytesIO(contents)).convert("RGB")
-        img_np = np.array(img)   # chuyển sang numpy
+        # Resize ảnh để giảm RAM peak
+        img = img.resize((224, 224))
     except Exception:
         return JSONResponse(status_code=400, content={"error": "Invalid image file"})
 
     try:
-        faces = DeepFace.extract_faces(
-            img_path=img_np,       # truyền thẳng numpy array
-            enforce_detection=False,
-            anti_spoofing=True
-        )
+        # Lưu ảnh tạm để truyền vào DeepFace
+        with NamedTemporaryFile(suffix=".jpg") as tmp:
+            img.save(tmp.name)
+            faces = DeepFace.extract_faces(
+                img_path=tmp.name,
+                enforce_detection=False,
+                detector_backend="opencv",  # backend nhẹ
+                model=face_model,
+                align=True,
+                silent=True
+            )
+
         results = []
         for face in faces:
             is_real = face.get("is_real", False)
@@ -73,7 +84,6 @@ async def predict_from_image(image: UploadFile = File(...)):
 
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
-
 
 
 # if __name__ == "__main__":
