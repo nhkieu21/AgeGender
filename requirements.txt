@@ -1,7 +1,8 @@
 fastapi
 uvicorn
+deepface
 pillow
 torch
 torchvision
-scikit-learn
+numpy
 python-multipart
