@@ -53,29 +53,21 @@ async def fas_from_image(image: UploadFile = File(...)):
     except Exception:
         return JSONResponse(status_code=400, content={"error": "Invalid image file"})
 
-    try:
-        with NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-            tmp_path = tmp.name
-            img.save(tmp_path)
+    with NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+        tmp_path = tmp.name
+        img.save(tmp_path)
 
-        faces = DeepFace.extract_faces(
-            img_path=tmp_path,
-            enforce_detection=False,
-            align=False, 
-            anti_spoofing=True
-        )
-    
-        if faces:
-            is_real = faces[0].get("is_real", False)
-            results = "REAL" if is_real else "SPOOF"
-        else:
-            results = None
+    faces = DeepFace.extract_faces(
+        img_path=tmp_path,
+        enforce_detection=False,
+        align=False, 
+        anti_spoofing=True
+    )
 
-        return {"faces": results}
+    if faces:
+        is_real = faces[0].get("is_real", False)
+        results = "REAL" if is_real else "SPOOF"
+    else:
+        results = None
 
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
-
-    finally:
-        if os.path.exists(tmp_path):
-            os.remove(tmp_path)
+    return {"face": results}
