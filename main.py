@@ -52,4 +52,3 @@ async def fas(image: UploadFile = File(...)):
     is_real = "REAL" if result == 0 else "SPOOF"
 
     return {"face" : is_real}
-
