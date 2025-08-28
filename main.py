@@ -23,7 +23,6 @@ def home():
 
 @app.post("/predict")
 async def predict_from_image(image: UploadFile = File(...)):
-    # Kiểm tra định dạng file
     if not image.filename.lower().endswith((".jpg", ".jpeg", ".png")):
         return JSONResponse(status_code=400, content={"error": "Only JPG/PNG images are supported"})
 
